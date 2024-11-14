@@ -622,7 +622,7 @@ let handle_flag prog flag =
       [ inline new_prog |> add_prop rnd_and_prec ]
 
 (** [export_prog] takes a NumFuzz [prog], converts it into FPCore with inlining/smart 
-substituion as dictated by [flag], and prints the resulting FPCore program to [outfile]*)
+substitution as dictated by [flag], and prints the resulting FPCore program to [outfile]*)
 let export_prog (prog : term) (outfile : string) (flag : translate_flag) : unit
     =
   let oc = open_out outfile in
