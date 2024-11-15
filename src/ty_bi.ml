@@ -550,7 +550,7 @@ let rec type_of (t : term_core) : (ty * bsi list) checker  =
     ty_debug i "### In case, [%3d] Inferred sensitivity for binder @[%a@] is @[%a@]" !ty_seq P.pp_binfo x P.pp_si (si_of_bsi si_x);
 
     let si_x =  (si_of_bsi si_x) in
-    check_sens_lt i si_zero si_x >>
+    check_sens_leq i si_zero si_x >>
     let si_x = Simpl.si_simpl si_x in
     let si_x = Simpl.si_simpl_compute si_x in
 
