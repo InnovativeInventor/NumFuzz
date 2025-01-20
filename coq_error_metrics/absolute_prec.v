@@ -155,6 +155,10 @@ Section RelPrec.
               (NonZeroSameSign (k * a) (k * b) -> NonZeroSameSign a b).
   Proof. Admitted.
 
+  Lemma NonZeroSameSignExp (a b : R) :
+    forall k, (NonZeroSameSign (a `^ k) (b `^ k) -> NonZeroSameSign a b).
+  Proof. Admitted.
+
   Definition RelPrec (a a' α : R) : Prop :=
     α >= 0 -> NonZeroSameSign a a' ->
     `|ln(a / a')| <= α.
@@ -220,17 +224,24 @@ Section RPElementaryProperties.
          f_equal.
          lra. Qed.
 
-  Fact RPabs_mul_eq : forall (k : R), `|k * a| = `|k| * `|a|.
-  Proof. Admitted.
+  Fact le_mul_pos : forall (k a b : R), a <= b -> (`|k| * a <= `|k| * b). Admitted.
+  Fact norm_mul_split : forall (a b : R), `| a * b | = `| a | * `| b |. Admitted.
+  Fact factor_exp : forall (a b k : R), (a `^ k / a' `^ k = (a / a') `^ k). Admitted.
 
-  Theorem RPProp4 : forall (k : R), (a ~ a' ; rp(α)) -> 0 <= α -> a*k ~ a'*k ; rp(`|k|*α).
-  Proof. Admitted.
-
-  Lemma RPProp4_1 :  a ~ a' ; rp(α) -> -a ~ -a' ; rp(α).
-  Proof. Admitted.
+  Theorem RPProp4 : forall (k : R), (a ~ a' ; rp(α)) -> 0 <= α -> a `^ k ~ a' `^ k ; rp(`|k|*α).
+  Proof. rewrite /RelPrec. move => k H1 H2 H3 H4.
+         rewrite factor_exp. rewrite ln_powR.
+         rewrite norm_mul_split.
+         suff key_rel : `|ln (R:=R) (a / a')| <= α.
+         apply (le_mul_pos k _ _) => //.
+         apply H1 => //=.
+         Check NonZeroSameSignMul.
+         apply (NonZeroSameSignExp a a' k) => //.
+         give_up.
+  Admitted.
 
   Theorem RPProp5 : forall (b b' β : R),
-      a ~ a' ; rp(α) ->  b ~ b' ; rp(β) -> 0 <= β -> a + b ~ a' + b' ; rp(α + β).
+      a ~ a' ; rp(α) ->  b ~ b' ; rp(β) -> 0 <= β -> a * b ~ a' * b' ; rp(α + β).
   Proof. Admitted.
 
   Theorem RPProp6 : forall (a'' δ : R ),
